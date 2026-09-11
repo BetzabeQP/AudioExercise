@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using AudioExercise.Collisions;
+using Microsoft.Xna.Framework.Audio;
+using Microsoft.Xna.Framework.Media;
 
 namespace AudioExercise;
 
@@ -19,6 +21,8 @@ public class AudioExampleGame : Game
     private int _coinsLeft;
 
     private Texture2D _ball;
+    private SoundEffect coinPickup;
+    private Song backgroundMusic;
 
     /// <summary>
     /// A game demonstrating collision detection
@@ -49,6 +53,7 @@ public class AudioExampleGame : Game
         ];
         _coinsLeft = _coins.Length;
         _slimeGhost = new SlimeGhostSprite();
+        coinPickup = Content.Load<SoundEffect>("Pickup_Coin15");
 
         base.Initialize();
     }
@@ -64,7 +69,11 @@ public class AudioExampleGame : Game
         foreach (var coin in _coins) coin.LoadContent(Content);
         _slimeGhost.LoadContent(Content);
         _spriteFont = Content.Load<SpriteFont>("arial");
-        _ball = Content.Load<Texture2D>("ball");
+        _ball = Content.Load<Texture2D>("ball");       
+        coinPickup = Content.Load<SoundEffect>("Pickup_Coin15");
+        backgroundMusic = Content.Load<Song>("DeeYan-Key-TheGame");
+        MediaPlayer.IsRepeating = true;
+        MediaPlayer.Play(backgroundMusic);
     }
 
     /// <summary>
@@ -88,6 +97,7 @@ public class AudioExampleGame : Game
                 _slimeGhost.Color = Color.Red;
                 coin.Collected = true;
                 _coinsLeft--;
+                coinPickup.Play();
             }
         }
 
